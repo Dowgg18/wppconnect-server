@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WPPConnect Dashboard</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fab fa-whatsapp"></i>
+                    <span>WPPConnect</span>
+                </div>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="nav-item active" data-section="sessions">
+                        <i class="fas fa-plug"></i>
+                        <span>Sessões</span>
+                    </li>
+                    <li class="nav-item" data-section="messages">
+                        <i class="fas fa-comments"></i>
+                        <span>Mensagens</span>
+                    </li>
+                    <li class="nav-item" data-section="contacts">
+                        <i class="fas fa-address-book"></i>
+                        <span>Contatos</span>
+                    </li>
+                    <li class="nav-item" data-section="groups">
+                        <i class="fas fa-users"></i>
+                        <span>Grupos</span>
+                    </li>
+                    <li class="nav-item" data-section="settings">
+                        <i class="fas fa-cog"></i>
+                        <span>Configurações</span>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-left">
+                    <h1 id="page-title">Gerenciar Sessões</h1>
+                </div>
+                <div class="header-right">
+                    <div class="status-indicator" id="api-status">
+                        <span class="status-dot offline"></span>
+                        <span>API Offline</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Sessions Section -->
+            <section id="sessions-section" class="content-section active">
+                <div class="section-header">
+                    <div class="section-actions">
+                        <button class="btn btn-primary" id="create-session-btn">
+                            <i class="fas fa-plus"></i>
+                            Nova Sessão
+                        </button>
+                        <button class="btn btn-secondary" id="refresh-sessions-btn">
+                            <i class="fas fa-sync-alt"></i>
+                            Atualizar
+                        </button>
+                    </div>
+                </div>
+
+                <div class="sessions-grid" id="sessions-grid">
+                    <!-- Sessions will be loaded here -->
+                </div>
+            </section>
+
+            <!-- Messages Section -->
+            <section id="messages-section" class="content-section">
+                <div class="message-form-container">
+                    <form id="message-form" class="message-form">
+                        <div class="form-group">
+                            <label for="session-select">Sessão:</label>
+                            <select id="session-select" required>
+                                <option value="">Selecione uma sessão</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="phone-input">Telefone:</label>
+                            <input type="text" id="phone-input" placeholder="5511999999999" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="message-input">Mensagem:</label>
+                            <textarea id="message-input" placeholder="Digite sua mensagem..." required></textarea>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-paper-plane"></i>
+                                Enviar Mensagem
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Contacts Section -->
+            <section id="contacts-section" class="content-section">
+                <div class="section-header">
+                    <div class="search-container">
+                        <input type="text" id="contact-search" placeholder="Buscar contatos...">
+                        <i class="fas fa-search"></i>
+                    </div>
+                </div>
+                <div class="contacts-list" id="contacts-list">
+                    <!-- Contacts will be loaded here -->
+                </div>
+            </section>
+
+            <!-- Groups Section -->
+            <section id="groups-section" class="content-section">
+                <div class="section-header">
+                    <button class="btn btn-primary" id="create-group-btn">
+                        <i class="fas fa-plus"></i>
+                        Criar Grupo
+                    </button>
+                </div>
+                <div class="groups-list" id="groups-list">
+                    <!-- Groups will be loaded here -->
+                </div>
+            </section>
+
+            <!-- Settings Section -->
+            <section id="settings-section" class="content-section">
+                <div class="settings-container">
+                    <div class="settings-group">
+                        <h3>Configurações da API</h3>
+                        <div class="form-group">
+                            <label for="api-url">URL da API:</label>
+                            <input type="text" id="api-url" value="http://localhost:21465">
+                        </div>
+                        <div class="form-group">
+                            <label for="secret-key">Chave Secreta:</label>
+                            <input type="password" id="secret-key" value="THISISMYSECURETOKEN">
+                        </div>
+                        <button class="btn btn-primary" id="save-settings-btn">
+                            <i class="fas fa-save"></i>
+                            Salvar Configurações
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <div id="create-session-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Criar Nova Sessão</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="create-session-form">
+                    <div class="form-group">
+                        <label for="session-name">Nome da Sessão:</label>
+                        <input type="text" id="session-name" required>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary modal-close">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Criar Sessão</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="qr-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>QR Code - Escaneie com WhatsApp</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="qr-container">
+                    <img id="qr-image" src="" alt="QR Code">
+                    <p>Abra o WhatsApp no seu celular e escaneie este código</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
